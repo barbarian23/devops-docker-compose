@@ -8,7 +8,7 @@ services:
     image: jenkins/jenkins:2.346.3-jdk11
     container_name: jenkins
     volumes:
-      - .jenkins:/var/jenkins_home jenkins
+      - ./jenkins:/var/jenkins_home jenkins
     networks:
       - jenkins
     ports:
