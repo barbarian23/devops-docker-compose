@@ -5,11 +5,11 @@ networks:
 
 services:
   grafana:
-    image: grafana
+    image: grafana/grafana
     container_name: grafana
     volumes:
       - ./grafana-storage:/var/lib/grafana grafana/grafana-enterprise
     networks:
       - grafana
     ports:
-      - 3000:3008
+      - 3008:3000
