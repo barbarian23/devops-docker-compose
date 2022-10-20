@@ -1,0 +1,12 @@
+version: '2'
+services:
+ mysql:
+    image: mysql:latest
+    volumes:
+      - ./sql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ZGViZXppdW1zb3VyY2U=
+      MYSQL_USER: kelvin
+      MYSQL_PASSWORD: ZGViZXppdW1zb3VyY2U=
+    ports:
+      - 3306:3306

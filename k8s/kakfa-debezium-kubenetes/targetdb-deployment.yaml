@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mysql-service-target
+  name: mysql-service-target
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+    name: mysql-port
+  selector:
+    app: mysql-target
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-target
+spec:
+  selector:
+    matchLabels:
+      app: mysql-target
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql-target
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: mysql-target
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ZGViZXppdW1zb3VyY2U=
+        - name: MYSQL_USER
+          value: kelvin
+        - name: MYSQL_PASSWORD
+          value: ZGViZXppdW1zb3VyY2U=
+        ports:
+        - containerPort: 3306
+          name: mysql
