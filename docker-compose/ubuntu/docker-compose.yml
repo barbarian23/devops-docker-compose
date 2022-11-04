@@ -1,0 +1,14 @@
+
+version: '3'
+
+
+networks:
+  ubuntu:
+
+
+services:
+  cache:
+    image: ubuntu:latest
+    command: need
+    networks:
+      - ubuntu

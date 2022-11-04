@@ -1,0 +1,35 @@
+version: '3'
+
+networks:
+  nginx:
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "8080:80"
+    # Thêm depends_on để nó start php-fpm trước khi start nginx, nếu không sẽ bị báo lỗi host php-fpm không tìm thấy
+    depends_on:
+      - php-fpm
+    networks:
+      - grafana
+    volumes:
+      # Logging
+      - ./nginx/log:/var/log/nginx/
+      # Volume đến code ứng dụng
+      - ./nginx/index.php:/var/www/html/index.php
+
+  mysql:
+    image: mysql:5.7
+    networks:
+      - grafana
+    environment:
+      MYSQL_DATABASE: 'laravel'
+      MYSQL_USER: 'mingnv'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+
+  php-fpm:
+    image: php:7.2-fpm
+    networks:
+      - grafana
