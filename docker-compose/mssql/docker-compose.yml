@@ -1,0 +1,16 @@
+version: '3'
+networks:
+  mssql:
+
+services:
+ mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    volumes:
+      - ./sqlvolume:/var/opt/mssql 
+    environment:
+      SA_PASSWORD: ZGViZXppdW1zb3VyY2U=
+      ACCEPT_EULA: Y
+    networks:
+      - mssql
+    ports:
+      - 5434:5434
