@@ -1,12 +1,36 @@
-version: '2'
+version: '3'
+
+networks:
+  mysqldup:
+    driver: bridge
+
 services:
- mysql:
-    image: mysql:latest
-    volumes:
-      - ./sql:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ZGViZXppdW1zb3VyY2U=
-      MYSQL_USER: kelvin
-      MYSQL_PASSWORD: ZGViZXppdW1zb3VyY2U=
+  mysql_master:
+    image: mysql:8.0
+    env_file:
+      - ./master/mysql_master.env
+    container_name: "mysql_master"
+    restart: "no"
     ports:
-      - 3306:3306
+      - 4406:3306
+    volumes:
+      - ./mysql.master.conf.cf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./master/data:/var/lib/mysql
+    networks:
+      - mysqldup
+
+  mysql_slave:
+    image: mysql:8.0
+    env_file:
+      - ./slave/mysql_slave.env
+    container_name: "mysql_slave"
+    restart: "no"
+    ports:
+      - 5506:3306
+    depends_on:
+      - mysql_master
+    volumes:
+      - ./mysql.slave.conf.cf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./slave/data:/var/lib/mysql
+    networks:
+      - mysqldup

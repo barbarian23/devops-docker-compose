@@ -1,12 +1,13 @@
 version: '3'
 
 networks:
-  redis:
+  mssql:
 
 services:
-  redis:
-    image: redis/redis-stack-server:latest
-    container_name: redis
+  mssql:
+    image: microsoft/mssql:latest
+    container_name: mssql
+    
     volumes:
       - ./redis-data/:/data
     networks:

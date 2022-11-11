@@ -1,16 +1,23 @@
 version: '3'
 networks:
-  mssql:
+  postgres:
 
 services:
- mssql:
-    image: mcr.microsoft.com/mssql/server:2017-latest
+ postgres:
+    image: postgres
     volumes:
-      - ./sqlvolume:/var/opt/mssql 
+      - ./postgresql:/var/lib/postgresql/data
     environment:
-      SA_PASSWORD: ZGViZXppdW1zb3VyY2U=
-      ACCEPT_EULA: Y
+      POSTGRES_PASSWORD: ZGViZXppdW1zb3VyY2U=
     networks:
-      - mssql
+      - postgres
     ports:
-      - 5434:5434
+      - 1433:1433
+
+ adminer:
+    image: adminer
+    restart: always
+    networks:
+      - postgres
+    ports:
+      - 8080:8080

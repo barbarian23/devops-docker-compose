@@ -1,4 +1,9 @@
 version: "3"
+
+networks:
+  mongoshard:
+    driver: bridge
+
 services:
   mongo1:
     hostname: mongo1
@@ -16,6 +21,8 @@ services:
       interval: 10s
     # logging:
     #   driver: none
+    networks:
+      - mongoshard
 
   mongo2:
     hostname: mongo2
@@ -28,6 +35,8 @@ services:
     command: --replSet rs0 --bind_ip_all
     # logging:
     #   driver: none
+    networks:
+      - mongoshard
 
   mongo3:
     hostname: mongo3
@@ -40,3 +49,5 @@ services:
     command: --replSet rs0 --bind_ip_all
     # logging:
     #   driver: none
+    networks:
+      - mongoshard
