@@ -37,8 +37,6 @@ services:
     image: docker.elastic.co/apm/apm-server:7.5.0
     cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
     cap_drop: ["ALL"]
-    networks:
-      - elastic
     ports:
     - 8200:8200
     command: >
