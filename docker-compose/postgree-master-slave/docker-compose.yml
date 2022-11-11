@@ -1,0 +1,59 @@
+version: '2'
+
+networks:
+  postgres-m-s:
+
+services:
+  postgresql-master:
+    image: docker.io/bitnami/postgresql:14
+    ports:
+      - '5432'
+    volumes:
+      - './postgresql_master_data:/bitnami/postgresql'
+    networks:
+      - postgres-m-s
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_USERNAME=anh
+      - POSTGRESQL_PASSWORD=ZGViZXppdW1zb3VyY2U=
+      - POSTGRESQL_DATABASE=my_database
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  postgresql-slave:
+    image: docker.io/bitnami/postgresql:14
+    ports:
+      - '5432'
+    depends_on:
+      - postgresql-master
+    networks:
+      - postgres-m-s
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_MASTER_HOST=postgresql-master
+      - POSTGRESQL_PASSWORD=my_password
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+
+    ports:
+      - "${PGADMIN_PORT:-5050}:3000"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgresql_master_data:
+    driver: local

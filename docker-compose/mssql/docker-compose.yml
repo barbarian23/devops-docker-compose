@@ -1,23 +1,16 @@
 version: '3'
+
 networks:
-  postgres:
+  mssql:
 
 services:
- postgres:
-    image: postgres
+  mssql:
+    image: microsoft/mssql:latest
+    container_name: mssql
+    
     volumes:
-      - ./postgresql:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: ZGViZXppdW1zb3VyY2U=
+      - ./redis-data/:/data
     networks:
-      - postgres
+      - redis
     ports:
-      - 1433:1433
-
- adminer:
-    image: adminer
-    restart: always
-    networks:
-      - postgres
-    ports:
-      - 8080:8080
+      - 6379:6379
