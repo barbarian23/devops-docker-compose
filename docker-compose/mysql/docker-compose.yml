@@ -6,7 +6,22 @@ services:
       - ./sql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ZGViZXppdW1zb3VyY2U=
-      MYSQL_USER: kelvin
+      MYSQL_USER: anh
       MYSQL_PASSWORD: ZGViZXppdW1zb3VyY2U=
     ports:
       - 3306:3306
+  
+ mysql-workbench:
+    image: lscr.io/linuxserver/mysql-workbench:latest
+    container_name: mysql-workbench
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./config:/config
+    ports:
+      - 3000:3000
+    cap_add:
+      - IPC_LOCK
+    restart: unless-stopped
