@@ -1,0 +1,17 @@
+version: '2.0'
+
+networks:
+  arctx:
+
+services:
+ swager:
+    image: swaggerapi/swagger-ui
+    container_name: swagger-ui
+    volumes:
+      - ./datas:/foo
+    environment:
+      SWAGGER_JSON: /foo/biollet-wallet-mock-swagger-apigateway.json
+    ports:
+      - 80:8080
+    networks:
+      - arctx
